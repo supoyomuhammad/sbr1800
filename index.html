@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard Capaian Tambah Usaha – Provinsi Lampung</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ── VARIABLES ─────────────────────────────────────────── */
+    :root {
+      --orange:       #F97316;
+      --orange-dark:  #C2540A;
+      --orange-light: #FED7AA;
+      --orange-pale:  #FFF7ED;
+      --white:        #FFFFFF;
+      --gray-50:      #F9FAFB;
+      --gray-100:     #F3F4F6;
+      --gray-200:     #E5E7EB;
+      --gray-400:     #9CA3AF;
+      --gray-600:     #4B5563;
+      --gray-800:     #1F2937;
+      --gray-900:     #111827;
+      --shadow-sm:    0 1px 3px rgba(0,0,0,.08);
+      --shadow-md:    0 4px 16px rgba(0,0,0,.10);
+      --shadow-lg:    0 8px 32px rgba(0,0,0,.12);
+      --radius:       14px;
+      --radius-sm:    8px;
+    }
+
+    /* ── RESET ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--gray-50);
+      color: var(--gray-800);
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ────────────────────────────────────────────── */
+    header {
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-200);
+      position: sticky; top: 0; z-index: 100;
+      box-shadow: var(--shadow-sm);
+    }
+    .header-inner {
+      max-width: 1280px; margin: 0 auto;
+      padding: 0 24px;
+      height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none;
+    }
+    .logo-icon {
+      width: 36px; height: 36px; background: var(--orange);
+      border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .logo-icon svg { width: 20px; height: 20px; fill: white; }
+    .logo-text { font-weight: 800; font-size: 15px; color: var(--gray-900); line-height: 1.2; }
+    .logo-text span { color: var(--orange); }
+    .header-right {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .badge-live {
+      display: flex; align-items: center; gap: 6px;
+      background: var(--orange-pale); border: 1px solid var(--orange-light);
+      color: var(--orange-dark); padding: 5px 12px; border-radius: 99px;
+      font-size: 12px; font-weight: 600;
+    }
+    .dot-live {
+      width: 7px; height: 7px; background: var(--orange);
+      border-radius: 50%;
+      animation: pulse 1.8s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: .5; transform: scale(1.35); }
+    }
+    .last-updated { font-size: 12px; color: var(--gray-400); font-family: 'DM Mono', monospace; }
+
+    /* ── HERO ──────────────────────────────────────────────── */
+    .hero {
+      background: linear-gradient(135deg, var(--gray-900) 0%, #2d1a0e 100%);
+      padding: 56px 24px 48px;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 70% 80% at 80% 50%, rgba(249,115,22,.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-inner { max-width: 1280px; margin: 0 auto; position: relative; }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(249,115,22,.15); border: 1px solid rgba(249,115,22,.3);
+      color: var(--orange-light); font-size: 12px; font-weight: 600;
+      padding: 5px 12px; border-radius: 99px; margin-bottom: 18px;
+      text-transform: uppercase; letter-spacing: .06em;
+    }
+    .hero h1 {
+      font-size: clamp(26px, 4vw, 42px);
+      font-weight: 800; color: var(--white);
+      line-height: 1.18; max-width: 640px;
+      margin-bottom: 10px;
+    }
+    .hero h1 span { color: var(--orange); }
+    .hero-sub { color: var(--gray-400); font-size: 15px; max-width: 500px; line-height: 1.6; }
+    .hero-stats {
+      display: flex; gap: 32px; margin-top: 36px; flex-wrap: wrap;
+    }
+    .hstat { display: flex; flex-direction: column; }
+    .hstat-val {
+      font-size: 32px; font-weight: 800; color: var(--white);
+      font-family: 'DM Mono', monospace; line-height: 1;
+    }
+    .hstat-val span { color: var(--orange); }
+    .hstat-lbl { font-size: 12px; color: var(--gray-400); margin-top: 4px; font-weight: 500; }
+
+    /* ── NAV TABS ───────────────────────────────────────────── */
+    .tabs-wrap {
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .tabs {
+      max-width: 1280px; margin: 0 auto;
+      padding: 0 24px;
+      display: flex; gap: 0;
+    }
+    .tab-btn {
+      padding: 16px 20px;
+      font-size: 14px; font-weight: 600;
+      background: none; border: none; cursor: pointer;
+      color: var(--gray-400);
+      border-bottom: 2px solid transparent;
+      transition: all .2s;
+      display: flex; align-items: center; gap: 7px;
+    }
+    .tab-btn.active { color: var(--orange); border-bottom-color: var(--orange); }
+    .tab-btn:hover:not(.active) { color: var(--gray-600); }
+    .tab-btn .cnt {
+      background: var(--gray-100); color: var(--gray-600);
+      font-size: 11px; padding: 1px 7px; border-radius: 99px;
+      font-family: 'DM Mono', monospace;
+    }
+    .tab-btn.active .cnt { background: var(--orange-pale); color: var(--orange-dark); }
+
+    /* ── MAIN CONTENT ───────────────────────────────────────── */
+    .main { max-width: 1280px; margin: 0 auto; padding: 32px 24px 60px; }
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* ── SECTION TITLE ──────────────────────────────────────── */
+    .section-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 20px; flex-wrap: wrap; gap: 12px;
+    }
+    .section-title {
+      font-size: 18px; font-weight: 700; color: var(--gray-900);
+    }
+    .section-title small { font-size: 13px; font-weight: 500; color: var(--gray-400); margin-left: 6px; }
+
+    /* ── SEARCH ─────────────────────────────────────────────── */
+    .search-box {
+      position: relative;
+    }
+    .search-box input {
+      border: 1px solid var(--gray-200); border-radius: var(--radius-sm);
+      padding: 9px 12px 9px 36px;
+      font-size: 13px; width: 220px;
+      outline: none; font-family: inherit; color: var(--gray-800);
+      background: var(--white);
+      transition: border .2s;
+    }
+    .search-box input:focus { border-color: var(--orange); }
+    .search-box svg {
+      position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+      width: 15px; height: 15px; color: var(--gray-400);
+    }
+
+    /* ── KABUPATEN CARDS ────────────────────────────────────── */
+    .kab-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 20px;
+    }
+    .kab-card {
+      background: var(--white); border: 1px solid var(--gray-200);
+      border-radius: var(--radius); padding: 22px 24px;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow .2s, transform .2s;
+      cursor: default;
+    }
+    .kab-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+    .kab-card-top {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .kab-name {
+      font-size: 14px; font-weight: 700; color: var(--gray-900);
+      text-transform: uppercase; letter-spacing: .03em;
+    }
+    .kab-rank {
+      background: var(--orange); color: white;
+      font-size: 11px; font-weight: 700; font-family: 'DM Mono', monospace;
+      padding: 3px 9px; border-radius: 99px;
+    }
+    .kab-total {
+      font-size: 36px; font-weight: 800; color: var(--gray-900);
+      font-family: 'DM Mono', monospace; line-height: 1;
+      margin-bottom: 4px;
+    }
+    .kab-lbl { font-size: 12px; color: var(--gray-400); margin-bottom: 16px; font-weight: 500; }
+    /* sparkline */
+    .sparkline { width: 100%; height: 44px; }
+    .kab-bar-wrap { margin-top: 14px; }
+    .kab-bar-bg {
+      background: var(--gray-100); border-radius: 99px;
+      height: 6px; overflow: hidden;
+    }
+    .kab-bar-fill {
+      height: 100%; border-radius: 99px;
+      background: linear-gradient(90deg, var(--orange-light), var(--orange));
+      transition: width .8s cubic-bezier(.4,0,.2,1);
+    }
+    .kab-bar-pct { font-size: 11px; color: var(--gray-400); margin-top: 5px; font-family: 'DM Mono', monospace; }
+
+    /* ── USER TABLE ─────────────────────────────────────────── */
+    .table-wrap {
+      background: var(--white); border: 1px solid var(--gray-200);
+      border-radius: var(--radius); overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+    .table-inner { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    thead tr { background: var(--gray-50); border-bottom: 1px solid var(--gray-200); }
+    th {
+      padding: 12px 16px; text-align: left;
+      font-size: 11px; font-weight: 700; color: var(--gray-400);
+      text-transform: uppercase; letter-spacing: .06em; white-space: nowrap;
+    }
+    td { padding: 12px 16px; font-size: 13px; border-bottom: 1px solid var(--gray-100); }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover td { background: var(--orange-pale); }
+    .rank-cell {
+      font-family: 'DM Mono', monospace; font-size: 12px;
+      color: var(--gray-400); font-weight: 500;
+    }
+    .rank-top { color: var(--orange); font-weight: 700; }
+    .user-name { font-weight: 600; color: var(--gray-900); }
+    .total-cell {
+      font-family: 'DM Mono', monospace; font-weight: 700;
+      color: var(--gray-900); font-size: 14px;
+    }
+    .mini-bar-wrap { display: flex; align-items: center; gap: 8px; min-width: 120px; }
+    .mini-bar-bg {
+      flex: 1; height: 5px; background: var(--gray-100);
+      border-radius: 99px; overflow: hidden;
+    }
+    .mini-bar-fill {
+      height: 100%; border-radius: 99px;
+      background: linear-gradient(90deg, var(--orange-light), var(--orange));
+    }
+    .mini-pct { font-size: 11px; color: var(--gray-400); font-family: 'DM Mono', monospace; white-space: nowrap; }
+    .kab-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+    .kab-tag {
+      background: var(--gray-100); color: var(--gray-600);
+      font-size: 10px; padding: 2px 7px; border-radius: 4px; font-weight: 500;
+    }
+
+    /* pagination */
+    .pagination {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 16px; border-top: 1px solid var(--gray-100);
+      flex-wrap: wrap; gap: 10px;
+    }
+    .pagination-info { font-size: 12px; color: var(--gray-400); }
+    .pagination-btns { display: flex; gap: 6px; }
+    .page-btn {
+      border: 1px solid var(--gray-200); background: var(--white);
+      color: var(--gray-600); padding: 6px 12px;
+      border-radius: var(--radius-sm); font-size: 12px; font-weight: 600;
+      cursor: pointer; transition: all .15s; font-family: inherit;
+    }
+    .page-btn:hover:not(:disabled) { border-color: var(--orange); color: var(--orange); }
+    .page-btn.active { background: var(--orange); border-color: var(--orange); color: white; }
+    .page-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+    /* ── LOADING ────────────────────────────────────────────── */
+    #loading {
+      text-align: center; padding: 60px 0;
+      color: var(--gray-400); font-size: 14px;
+    }
+    .spinner {
+      width: 32px; height: 32px; border: 3px solid var(--gray-200);
+      border-top-color: var(--orange); border-radius: 50%;
+      animation: spin .7s linear infinite;
+      margin: 0 auto 12px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── RESPONSIVE ─────────────────────────────────────────── */
+    @media (max-width: 640px) {
+      .hero { padding: 36px 16px 32px; }
+      .main { padding: 24px 16px 40px; }
+      .kab-grid { grid-template-columns: 1fr; }
+      th:nth-child(5), td:nth-child(5) { display: none; }
+      .search-box input { width: 160px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <a class="logo" href="#">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+      <div class="logo-text">Capaian <span>Tambah Usaha</span><br><span style="font-weight:500;color:var(--gray-400);font-size:12px;">Provinsi Lampung</span></div>
+    </a>
+    <div class="header-right">
+      <div class="badge-live"><div class="dot-live"></div>Live</div>
+      <div class="last-updated" id="hdr-updated">—</div>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Monitoring Real-Time
+    </div>
+    <h1>Dashboard Capaian<br><span>Tambah Usaha</span></h1>
+    <p class="hero-sub">Pantau progress pengumpulan data usaha seluruh Kabupaten/Kota di Provinsi Lampung secara real-time.</p>
+    <div class="hero-stats">
+      <div class="hstat">
+        <div class="hstat-val" id="stat-total">—</div>
+        <div class="hstat-lbl">Total Usaha Terinput</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-val" id="stat-kab">—</div>
+        <div class="hstat-lbl">Kabupaten/Kota</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-val" id="stat-user">—</div>
+        <div class="hstat-lbl">Petugas Aktif</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-val" id="stat-today">—</div>
+        <div class="hstat-lbl">Input Hari Ini</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TABS -->
+<div class="tabs-wrap">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('kab', this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      Kabupaten / Kota
+      <span class="cnt" id="cnt-kab">—</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('user', this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Petugas / User
+      <span class="cnt" id="cnt-user">—</span>
+    </button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div id="loading"><div class="spinner"></div>Memuat data…</div>
+
+  <!-- PANEL: KABUPATEN -->
+  <div class="panel" id="panel-kab">
+    <div class="section-header">
+      <div class="section-title">Capaian per Kabupaten / Kota <small id="kab-count"></small></div>
+    </div>
+    <div class="kab-grid" id="kab-grid"></div>
+  </div>
+
+  <!-- PANEL: USER -->
+  <div class="panel" id="panel-user">
+    <div class="section-header">
+      <div class="section-title">Capaian per Petugas <small id="user-count"></small></div>
+      <div class="search-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="user-search" placeholder="Cari username…" oninput="filterUsers()" />
+      </div>
+    </div>
+    <div class="table-wrap">
+      <div class="table-inner">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Username</th>
+              <th>Total Usaha</th>
+              <th>Kontribusi</th>
+              <th>Kabupaten/Kota</th>
+            </tr>
+          </thead>
+          <tbody id="user-tbody"></tbody>
+        </table>
+      </div>
+      <div class="pagination">
+        <div class="pagination-info" id="page-info"></div>
+        <div class="pagination-btns" id="page-btns"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── CONFIG ────────────────────────────────────────────────
+const PAGE_SIZE  = 25;
+
+// ── STATE ─────────────────────────────────────────────────
+let appData     = null;
+let filteredUsers = [];
+let currentPage = 1;
+let activeTab   = 'kab';
+
+// ── INIT ──────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  fetch('data.json?' + Date.now()) // cache-bust agar selalu ambil data terbaru
+    .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .then(d => { appData = d; init(); })
+    .catch(err => {
+      document.getElementById('loading').innerHTML =
+        '<p style="color:#C2540A;padding:20px">⚠️ Gagal memuat data.json: ' + err + '</p>';
+    });
+});
+
+function init() {
+  document.getElementById('loading').style.display = 'none';
+
+  // Hero stats
+  const today = new Date().toISOString().slice(0,10);
+  let todayTotal = 0;
+  appData.kabupaten.forEach(k => {
+    todayTotal += (k.harian[today] || 0);
+  });
+
+  document.getElementById('stat-total').textContent  = appData.total_records.toLocaleString('id-ID');
+  document.getElementById('stat-kab').textContent     = appData.kabupaten.length;
+  document.getElementById('stat-user').textContent    = appData.users.length;
+  document.getElementById('stat-today').textContent   = todayTotal.toLocaleString('id-ID');
+  document.getElementById('hdr-updated').textContent  = 'Update: ' + appData.last_updated;
+  document.getElementById('cnt-kab').textContent      = appData.kabupaten.length;
+  document.getElementById('cnt-user').textContent     = appData.users.length;
+  document.getElementById('kab-count').textContent    = appData.kabupaten.length + ' wilayah';
+
+  renderKabupaten();
+  filteredUsers = [...appData.users];
+  renderUsersPage(1);
+}
+
+// ── TAB SWITCH ────────────────────────────────────────────
+function switchTab(tab, btn) {
+  activeTab = tab;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + tab).classList.add('active');
+}
+
+// ── KABUPATEN ─────────────────────────────────────────────
+function renderKabupaten() {
+  const grid   = document.getElementById('kab-grid');
+  const maxVal = appData.kabupaten[0].total;
+  grid.innerHTML = '';
+
+  appData.kabupaten.forEach((kab, i) => {
+    const pct   = ((kab.total / appData.total_records) * 100).toFixed(1);
+    const spark  = buildSparkline(kab.harian);
+    const card   = document.createElement('div');
+    card.className = 'kab-card';
+    card.innerHTML = `
+      <div class="kab-card-top">
+        <div class="kab-name">${kab.nama}</div>
+        <div class="kab-rank">#${i+1}</div>
+      </div>
+      <div class="kab-total">${kab.total.toLocaleString('id-ID')}</div>
+      <div class="kab-lbl">usaha terinput</div>
+      ${spark}
+      <div class="kab-bar-wrap">
+        <div class="kab-bar-bg"><div class="kab-bar-fill" style="width:${(kab.total/maxVal*100).toFixed(1)}%"></div></div>
+        <div class="kab-bar-pct">${pct}% dari total provinsi</div>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+
+function buildSparkline(harian) {
+  const entries = Object.entries(harian).sort((a,b) => a[0].localeCompare(b[0]));
+  if (!entries.length) return '';
+  const vals    = entries.map(e => e[1]);
+  const maxV    = Math.max(...vals, 1);
+  const W = 280, H = 44, pad = 2;
+  const pts = vals.map((v, i) => {
+    const x = pad + (i / (vals.length - 1 || 1)) * (W - pad*2);
+    const y = H - pad - (v / maxV) * (H - pad*2);
+    return `${x},${y}`;
+  }).join(' ');
+
+  // area fill
+  const area = `${pad},${H} ` + pts + ` ${W-pad},${H}`;
+
+  return `<svg class="sparkline" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="sg${Math.random().toString(36).slice(2)}" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#F97316" stop-opacity=".25"/>
+        <stop offset="100%" stop-color="#F97316" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <polygon points="${area}" fill="url(#sg${Math.random().toString(36).slice(2)})" />
+    <polyline points="${pts}" fill="none" stroke="#F97316" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+  </svg>`;
+}
+
+// ── USERS ─────────────────────────────────────────────────
+function filterUsers() {
+  const q = document.getElementById('user-search').value.toLowerCase().trim();
+  filteredUsers = q
+    ? appData.users.filter(u => u.username.toLowerCase().includes(q))
+    : [...appData.users];
+  document.getElementById('user-count').textContent = filteredUsers.length + ' petugas';
+  renderUsersPage(1);
+}
+
+function renderUsersPage(page) {
+  currentPage = page;
+  const total  = filteredUsers.length;
+  const pages  = Math.ceil(total / PAGE_SIZE);
+  const start  = (page - 1) * PAGE_SIZE;
+  const slice  = filteredUsers.slice(start, start + PAGE_SIZE);
+  const maxVal = appData.users[0]?.total || 1;
+
+  document.getElementById('user-count').textContent = filteredUsers.length + ' petugas';
+
+  const tbody = document.getElementById('user-tbody');
+  tbody.innerHTML = '';
+  slice.forEach((u, idx) => {
+    const rank     = start + idx + 1;
+    const pct      = ((u.total / appData.total_records) * 100).toFixed(2);
+    const barPct   = ((u.total / maxVal) * 100).toFixed(1);
+    const kabTags  = Object.entries(u.kabupaten)
+      .slice(0, 3)
+      .map(([k,v]) => `<span class="kab-tag">${k.split(' ').slice(0,2).join(' ')} (${v})</span>`)
+      .join('');
+
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="rank-cell ${rank<=3?'rank-top':''}">${rank<=3?'🏆':''}${rank}</td>
+      <td class="user-name">${u.username}</td>
+      <td class="total-cell">${u.total.toLocaleString('id-ID')}</td>
+      <td>
+        <div class="mini-bar-wrap">
+          <div class="mini-bar-bg"><div class="mini-bar-fill" style="width:${barPct}%"></div></div>
+          <span class="mini-pct">${pct}%</span>
+        </div>
+      </td>
+      <td><div class="kab-tags">${kabTags}</div></td>`;
+    tbody.appendChild(tr);
+  });
+
+  // info
+  document.getElementById('page-info').textContent =
+    `Menampilkan ${start+1}–${Math.min(start+PAGE_SIZE, total)} dari ${total} petugas`;
+
+  // buttons
+  const btnWrap = document.getElementById('page-btns');
+  btnWrap.innerHTML = '';
+  const addBtn = (label, p, disabled) => {
+    const b = document.createElement('button');
+    b.className = 'page-btn' + (p === page ? ' active' : '');
+    b.textContent = label;
+    b.disabled = disabled;
+    b.onclick = () => renderUsersPage(p);
+    btnWrap.appendChild(b);
+  };
+
+  addBtn('‹', page-1, page===1);
+  const range = getPageRange(page, pages);
+  range.forEach(p => {
+    if (p === '…') {
+      const s = document.createElement('span');
+      s.textContent = '…'; s.style.cssText = 'padding:0 4px;color:var(--gray-400);font-size:13px;';
+      btnWrap.appendChild(s);
+    } else addBtn(p, p, false);
+  });
+  addBtn('›', page+1, page===pages);
+}
+
+function getPageRange(cur, total) {
+  if (total <= 7) return Array.from({length: total}, (_,i) => i+1);
+  if (cur <= 4) return [1,2,3,4,5,'…',total];
+  if (cur >= total-3) return [1,'…',total-4,total-3,total-2,total-1,total];
+  return [1,'…',cur-1,cur,cur+1,'…',total];
+}
+</script>
+</body>
+</html>

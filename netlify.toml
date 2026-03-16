@@ -1,0 +1,14 @@
+# netlify.toml — Konfigurasi Netlify
+# File ini memastikan data.json selalu fresh dan CORS berfungsi
+
+[[headers]]
+  for = "/data.json"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+    Access-Control-Allow-Origin = "*"
+    Content-Type = "application/json; charset=utf-8"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
